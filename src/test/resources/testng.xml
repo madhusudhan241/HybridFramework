@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="Cucumber Test Suite" parallel="methods" thread-count="4">
+    <listeners>
+        <listener class-name="org.listerners.ExtentCucumberListener"/>
+        <listener class-name="org.listerners.RetryTransformer"/>
+    </listeners>
+    <test name="Cucumber Scenarios">
+        <classes>
+            <class name="org.runners.TestRunner" />
+        </classes>
+    </test>
+</suite>
