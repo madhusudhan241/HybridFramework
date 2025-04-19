@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configurations
-KEY_NAME="key-0e9e5e15ddd797396"                     # Replace with your actual key pair
+KEY_NAME="jenkins-key"                     # Replace with your actual key pair
 AMI_ID="ami-0e35ddab05955cf57"                # Ubuntu 20.04 AMI
 INSTANCE_TYPE="t2.medium"
 SECURITY_GROUP_ID="sg-043e4c8ef6fc95151"               # Allow ports 22 (SSH), 4444 (Grid), etc.
