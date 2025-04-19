@@ -46,7 +46,7 @@ pipeline {
                     def ec2Info = readFile('ec2-output.txt')
                     echo "[DEBUG] ec2-output.txt contents:\n${ec2Info}"
 
-               def match = ec2Info =~ /Public IP: (\d+\.\d+\.\d+\.\d+)/
+                def match = ec2Info =~ /EC2 instance is live at: ([\d.]+)/
                echo "************Madhu********"
 
                            if (match.find()) {
