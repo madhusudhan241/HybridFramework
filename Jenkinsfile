@@ -47,6 +47,8 @@ pipeline {
                     echo "[DEBUG] ec2-output.txt contents:\n${ec2Info}"
 
                def match = ec2Info =~ /Public IP: (\d+\.\d+\.\d+\.\d+)/
+               echo "************Madhu********"
+
                            if (match) {
                                env.EC2_IP = match[0][1]
                                echo "[+] EC2 Public IP: ${env.EC2_IP}"
