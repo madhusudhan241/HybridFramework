@@ -60,18 +60,16 @@ pipeline {
         }
 
         stage('Provision EC2') {
+
             steps {
-                echo "[+] Installing Docker, Java, Docker Compose and Running docker-compose..."
-                sh """
-                chmod 400 ${PEM_FILE}
-                ssh -o StrictHostKeyChecking=no -i ${PEM_FILE} ubuntu@${EC2_IP} << EOF
-                    git clone ${REPO}
-                    cd automation-framework/infra
-                    chmod +x setup-infra.sh
-                    ./setup-infra.sh
-                EOF
-                """
-            }
+                    echo '[+] Installing Docker, Java, Docker Compose and Running docker-compose...'
+                    withCredentials([file(credentialsId: 'ec2-ssh-key', variable: 'KEY_FILE')]) {
+                        sh '''
+                            chmod 400 $KEY_FILE
+                            ssh -o StrictHostKeyChecking=no -i $KEY_FILE ec2-user@$EC2_IP 'bash -s' < infra/setup-infra.sh
+                        '''
+                    }
+                }
         }
 
         stage('Run Tests') {
