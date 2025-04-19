@@ -66,7 +66,7 @@ pipeline {
                     withCredentials([file(credentialsId: 'ec2-ssh-key', variable: 'KEY_FILE')]) {
                         sh '''
                             chmod 400 $KEY_FILE
-                            ssh -o StrictHostKeyChecking=no -i $KEY_FILE ec2-user@$EC2_IP 'bash -s' < infra/setup-infra.sh
+                            ssh -o StrictHostKeyChecking=no -i $KEY_FILE ubuntu@$EC2_IP 'bash -s' < infra/setup-infra.sh
                         '''
                     }
                 }
