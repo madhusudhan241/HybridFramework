@@ -20,10 +20,22 @@ pipeline {
                 bat 'aws --version'
             }
         }
-        stage('Launch EC2') {
+        stage('Launch EC2 using AWS CLI') {
             steps {
-                echo "[+] Launching EC2 instance..."
-                sh 'chmod +x infra/launch-ec2.sh && infra/launch-ec2.sh > ec2-output.txt'
+                  withCredentials([usernamePassword(
+                                   credentialsId: 'aws-creds',
+                                   usernameVariable: 'AWS_ACCESS_KEY_ID',
+                                   passwordVariable: 'AWS_SECRET_ACCESS_KEY'
+                               )]) {
+                                   sh '''
+                                       export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+                                       export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+                                       export AWS_REGION=${AWS_REGION}
+
+                                       chmod +x infra/launch-ec2.sh
+                                       infra/launch-ec2.sh
+                                   '''
+                               }
             }
         }
 
