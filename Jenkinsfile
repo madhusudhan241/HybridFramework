@@ -15,14 +15,18 @@ pipeline {
                 git branch: 'main', url: "${REPO}"
             }
         }
-        stage('AWS CLI'){
-
-           steps{
-           echo "AWS CLI install"
-           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-           unzip awscliv2.zip
-           sudo ./aws/install
-           }
+        stage('Install AWS CLI') {
+            steps {
+                script {
+                    sh '''
+                        echo "Installing AWS CLI..."
+                        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+                        unzip awscliv2.zip
+                        sudo ./aws/install || true
+                        aws --version
+                    '''
+                }
+            }
         }
         stage('Launch EC2') {
             steps {
