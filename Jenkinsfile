@@ -18,7 +18,7 @@ pipeline {
         stage('Launch EC2') {
             steps {
                 echo "[+] Launching EC2 instance..."
-                sh 'chmod +x infra/launch-ec2.sh && ./infra/launch-ec2.sh > ec2-output.txt'
+                sh 'chmod +x infra/launch-ec2.sh && ./src/test/infra/launch-ec2.sh > ec2-output.txt'
             }
         }
 
