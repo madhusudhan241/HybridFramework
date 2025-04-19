@@ -38,6 +38,7 @@ echo "🚀 EC2 instance is live at: $PUBLIC_IP"
 echo "🧪 Selenium Grid UI (if applicable): http://$PUBLIC_IP:4444/ui"
 
 # Authorize SSH access from your IP
+echo "Madhu"
 aws ec2 authorize-security-group-ingress \
   --group-id "$SECURITY_GROUP_ID" \
   --protocol tcp \
