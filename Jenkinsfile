@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         AWS_REGION = 'ap-south-1'
-        KEY_NAME = 'key-0c2f9994cda9a819e'
-        PEM_FILE = 'ec2-key-pem'
+        KEY_NAME = 'jenkins-key'
+        PEM_FILE = 'jenkins-key.pem'
         REPO = 'https://github.com/madhusudhan241/HybridFramework'
     }
 
