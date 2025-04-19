@@ -42,6 +42,7 @@ pipeline {
         stage('Get EC2 IP') {
             steps {
                 script {
+                echo "[DEBUG] ec2-output.txt contents:\n${ec2Info}"
                     def ec2Info = readFile('ec2-output.txt')
                     def match = ec2Info =~ /Public IP: (.*)/
                     if (match) {
