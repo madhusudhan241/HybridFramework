@@ -42,15 +42,17 @@ pipeline {
         stage('Get EC2 IP') {
             steps {
                 script {
-                echo "[DEBUG] ec2-output.txt contents:\n${ec2Info}"
+
                     def ec2Info = readFile('ec2-output.txt')
-                    def match = ec2Info =~ /Public IP: (.*)/
-                    if (match) {
-                        env.EC2_IP = match[0][1]
-                        echo "[+] EC2 Public IP: ${env.EC2_IP}"
-                    } else {
-                        error("EC2 IP not found in output")
-                    }
+                    echo "[DEBUG] ec2-output.txt contents:\n${ec2Info}"
+
+               def match = ec2Info =~ /Public IP: (\d+\.\d+\.\d+\.\d+)/
+                           if (match) {
+                               env.EC2_IP = match[0][1]
+                               echo "[+] EC2 Public IP: ${env.EC2_IP}"
+                           } else {
+                               error("[ERROR] EC2 IP not found in ec2-output.txt — instance may have failed to launch.")
+                           }
                 }
             }
         }
