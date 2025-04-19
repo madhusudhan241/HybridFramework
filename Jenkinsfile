@@ -33,7 +33,7 @@ pipeline {
                                        export AWS_REGION=${AWS_REGION}
 
                                        chmod +x infra/launch-ec2.sh
-                                       infra/launch-ec2.sh
+                                       infra/launch-ec2.sh  > ec2-output.txt 2>&1
                                    '''
                                }
             }
