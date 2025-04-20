@@ -65,14 +65,26 @@ pipeline {
                 sh """
                 chmod 400 ${PEM_FILE}
                 ssh -o StrictHostKeyChecking=no -i ${PEM_FILE} ubuntu@${EC2_IP} << EOF
+echo "[*] Waiting for any apt locks to clear..."
+while sudo fuser /var/lib/apt/lists/lock >/dev/null 2>&1; do
+    echo "Another apt process is running... waiting"
+    sleep 5
+done
+echo "[*] Updating apt sources..."
       sudo apt update -y
+      echo "[*] Installing git OpenJDK 11 docker..."
+
       sudo apt install -y git openjdk-11-jdk docker.io curl unzip
+
+      echo "[*] Adding Jenkins (or current) user to Docker group..."
+
       sudo usermod -aG docker \$USER
       sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-\\\$(uname -s)-\\\$(uname -m)" -o /usr/local/bin/docker-compose
       sudo chmod +x /usr/local/bin/docker-compose
 
       echo "[*] Starting Docker if not running..."
       if ! sudo systemctl is-active --quiet docker; then
+      sudo systemctl enable docker
         sudo systemctl start docker
       fi
 
