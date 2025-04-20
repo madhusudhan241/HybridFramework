@@ -65,9 +65,14 @@ pipeline {
                 sh """
                 chmod 400 ${PEM_FILE}
                 ssh -o StrictHostKeyChecking=no -i ${PEM_FILE} ubuntu@${EC2_IP} << EOF
-
-                    chmod +x setup-infra.sh
-                    ./setup-infra.sh
+      sudo apt update -y
+      sudo apt install -y git openjdk-11-jdk docker.io curl unzip
+      sudo usermod -aG docker \$USER
+      sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-\\\$(uname -s)-\\\$(uname -m)" -o /usr/local/bin/docker-compose
+      sudo chmod +x /usr/local/bin/docker-compose
+      git clone https://github.com/madhusudhan241/HybridFramework.git
+      cd HybridFramework/infra
+      docker-compose up -d
                 EOF
                 """
             }
