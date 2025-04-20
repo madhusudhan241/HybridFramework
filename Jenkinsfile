@@ -66,7 +66,7 @@ pipeline {
                 chmod 400 ${PEM_FILE}
                 ssh -o StrictHostKeyChecking=no -i ${PEM_FILE} ubuntu@${EC2_IP} << EOF
                     git clone ${REPO}
-                    cd automation-framework/infra
+                    cd HybridFramework/infra
                     chmod +x setup-infra.sh
                     ./setup-infra.sh
                 EOF
