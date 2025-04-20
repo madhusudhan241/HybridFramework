@@ -72,6 +72,7 @@ pipeline {
       sudo chmod +x /usr/local/bin/docker-compose
       git clone https://github.com/madhusudhan241/HybridFramework.git
       cd HybridFramework/infra
+      sleep 3
       docker-compose up -d
                 EOF
                 """
