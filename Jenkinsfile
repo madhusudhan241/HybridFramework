@@ -58,6 +58,15 @@ pipeline {
                 }
             }
         }
+
+        stage('Wait for SSH') {
+            steps {
+                echo '[*] Waiting for EC2 to allow SSH...'
+                sleep time: 60, unit: 'SECONDS'
+            }
+        }
+
+
 stage('Provision EC2') {
     steps {
         echo "[+] Installing Docker, Java, Docker Compose and Running docker-compose..."
