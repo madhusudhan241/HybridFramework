@@ -1,4 +1,4 @@
-pipeline {
+`pipeline {
     agent any
 
     environment {
@@ -58,44 +58,47 @@ pipeline {
                 }
             }
         }
-
-        stage('Provision EC2') {
-            steps {
-                echo "[+] Installing Docker, Java, Docker Compose and Running docker-compose..."
-                sh """
-                chmod 400 ${PEM_FILE}
-                ssh -o StrictHostKeyChecking=no -i ${PEM_FILE} ubuntu@${EC2_IP} << EOF
+stage('Provision EC2') {
+    steps {
+        echo "[+] Installing Docker, Java, Docker Compose and Running docker-compose..."
+        sh """
+        chmod 400 ${PEM_FILE}
+        ssh -o StrictHostKeyChecking=no -i ${PEM_FILE} ubuntu@${EC2_IP} << 'EOF'
 echo "[*] Waiting for any apt locks to clear..."
 while sudo fuser /var/lib/apt/lists/lock >/dev/null 2>&1; do
     echo "Another apt process is running... waiting"
     sleep 5
 done
+
 echo "[*] Updating apt sources..."
-      sudo apt update -y
-      echo "[*] Installing git OpenJDK 11 docker..."
+sudo apt update -y
 
-      sudo apt install -y git openjdk-11-jdk docker.io curl unzip
+echo "[*] Installing git, OpenJDK 11, docker..."
+sudo apt install -y git openjdk-11-jdk docker.io curl unzip
 
-      echo "[*] Adding Jenkins (or current) user to Docker group..."
+echo "[*] Adding current user to Docker group..."
+sudo usermod -aG docker \$USER
 
-      sudo usermod -aG docker \$USER
-      sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-\\\$(uname -s)-\\\$(uname -m)" -o /usr/local/bin/docker-compose
-      sudo chmod +x /usr/local/bin/docker-compose
+echo "[*] Installing Docker Compose..."
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-\$(uname -s)-\$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 
-      echo "[*] Starting Docker if not running..."
-      if ! sudo systemctl is-active --quiet docker; then
-      sudo systemctl enable docker
-        sudo systemctl start docker
-      fi
+echo "[*] Starting Docker if not running..."
+if ! sudo systemctl is-active --quiet docker; then
+    sudo systemctl enable docker
+    sudo systemctl start docker
+fi
 
-      git clone https://github.com/madhusudhan241/HybridFramework.git
-      cd HybridFramework/infra
-      sleep 3
-      docker-compose up -d
-                EOF
-                """
-            }
-        }
+echo "[*] Cloning HybridFramework repo..."
+git clone https://github.com/madhusudhan241/HybridFramework.git
+cd HybridFramework/infra
+
+echo "[*] Starting Docker Compose services..."
+docker-compose up -d
+EOF
+        """
+    }
+}
 
         stage('Run Tests') {
             steps {
@@ -111,4 +114,4 @@ echo "[*] Updating apt sources..."
             // Optionally terminate EC2
         }
     }
-}
+}`
